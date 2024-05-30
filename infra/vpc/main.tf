@@ -16,7 +16,7 @@ resource "aws_subnet" "public-subnet" {
  }
 }
 
-resource "aws_subnet" "private_subnet" {
+resource "aws_subnet" "private-subnet" {
  vpc_id             = aws_vpc.main-vpc.id
  cidr_block         = "10.0.1.0/24"
  availability_zone  = "eu-west-3a"
