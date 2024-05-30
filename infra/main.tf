@@ -23,6 +23,11 @@ module "kms" {
   ressource  = "groupe1-5si1-esgi-2024-rkl-kms"
 }
 
+module "cloudwatch" {
+  source    = "./cloudwatch"
+  ressource-log = "logging"
+}
+
 data "http" "myip" {
   url = "https://ifconfig.me"
 }

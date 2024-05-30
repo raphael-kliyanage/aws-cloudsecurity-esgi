@@ -39,6 +39,27 @@ resource "aws_iam_user_policy" "kungfu_policy" {
   })
 }
 
+resource "aws_cloudwatch_log_group" "cloudwatch_log_policy" {
+  name = "tf-${var.policy_name}-policy"
+  #user = aws_iam_user.kungfu_user.name
+
+  #policy = jsonencode({
+  #  "Version" : "2012-10-17",
+  #  "Statement" : [
+  #    {
+  #      "Effect" : "Allow",
+  #      "Action" : [
+  #	  "logs:CreateLogGroup"
+  #      ],
+  #      "Resource" : [
+  #        "arn:aws:iam::421751520950:user/*",
+  #        "arn:aws:iam::421751520950:policy/tf-fake-admin-policy"
+  #      ]
+  #    }
+  #  ]
+  #})
+}
+
 resource "aws_iam_policy" "fake_admin_policy" {
   name = "tf-fake-admin-policy"
 
