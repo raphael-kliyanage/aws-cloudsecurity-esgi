@@ -23,63 +23,26 @@ resource "aws_iam_instance_profile" "kungfu_profile" {
 }
 
 resource "aws_instance" "kungfu_ec2" {
-  ami                  = data.aws_ami.debian_11.id
-  instance_type        = "t2.micro"
-  security_groups      = [aws_security_group.kungfu_sg.name]
-  key_name             = aws_key_pair.kungfu_key.id
-  iam_instance_profile = aws_iam_instance_profile.kungfu_profile.name
-  user_data            = file("${path.module}/scripts/install_lab.sh")
+  ami                    = data.aws_ami.debian_11.id
+  instance_type          = "t2.micro"
+  subnet_id              = var.subnet_id
+  vpc_security_group_ids = [var.vpc_security_group.ids]
+  key_name               = aws_key_pair.kungfu_key.id
+  iam_instance_profile   = aws_iam_instance_profile.kungfu_profile.name
+  user_data              = file("${path.module}/scripts/install_lab.sh")
   root_block_device {
     delete_on_termination = true
   }
   metadata_options {
-   http_tokens = "required"
+   http_tokens   = "required"
+   http_endpoint = "enabled"
   }
   tags = {
     Name = "tf-${var.instance_name}-ec2"
   }
 }
 
-resource "aws_eip" "kungfu_eip" {
-  vpc = true
-  tags = {
-    Name = "tf-${var.instance_name}-eip"
-  }
-}
-
-resource "aws_default_vpc" "default" {
-  tags = {
-    Name = "Default VPC"
-  }
-}
-
 resource "aws_eip_association" "eip_assoc" {
   instance_id   = aws_instance.kungfu_ec2.id
-  allocation_id = aws_eip.kungfu_eip.id
-}
-
-resource "aws_security_group" "kungfu_sg" {
-  name        = "tf-${var.instance_name}-sg"
-  description = "Allow SSH & HTTPS traffic from current ip"
-  vpc_id      = aws_default_vpc.default.id
-
-  ingress {
-    description = "Allow all ingress"
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = ["${var.my_ip}/32"]
-  }
-
-  egress {
-    description = "Allow all egress"
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "tf-${var.instance_name}-sg"
-  }
+  allocation_id = var.allocation_id
 }
