@@ -59,3 +59,12 @@ resource "aws_eip" "nat-eip" {
   Name = "nat-eip"
  }
 }
+
+resource "aws_nat_gateway" "nat-gateway" {
+ allocation_id = aws_eip.nat-eip.id
+ subnet_id     = aws_subnet.public-subnet.id
+
+ tags = {
+  Name = "nat-gateway"
+ }
+}
