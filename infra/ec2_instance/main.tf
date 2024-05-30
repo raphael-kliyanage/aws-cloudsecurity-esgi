@@ -32,6 +32,9 @@ resource "aws_instance" "kungfu_ec2" {
   root_block_device {
     delete_on_termination = true
   }
+  metadata_options {
+    http_tokens  = "required"
+  }
   tags = {
     Name = "tf-${var.instance_name}-ec2"
   }
@@ -80,3 +83,4 @@ resource "aws_security_group" "kungfu_sg" {
     Name = "tf-${var.instance_name}-sg"
   }
 }
+
