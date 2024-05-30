@@ -49,6 +49,15 @@ resource "aws_eip" "kungfu_eip" {
   }
 }
 
+resource "aws_nat_gateway" "nat-gateway" {
+ allocation_id = aws_eip.kungfu_eip.id
+ subnet_id     = var.public_subnet_id.id
+
+ tags = {
+  Name = "nat-gateway"
+ }
+}
+
 resource "aws_default_vpc" "default" {
   tags = {
     Name = "Default VPC"
@@ -67,40 +76,16 @@ resource "aws_security_group" "vps_sg" {
 
   ingress {
     description = "allow in http requests"
-    from_port   = 80
-    to_port     = 80
+    from_port   = 0
+    to_port     = 65535 
     protocol    = "tcp"
     cidr_blocks = ["${var.my_ip}/32"]
-  }
-
-  ingress {
-    description = "allow in https requests"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["${var.my_ip}/32"]
-  }
-
-  ingress {
-    description = "allow in ssh requests"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["${var.my_ip}/32"]
-  }
-
-  egress {
-    description = "allow out http requests"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
     description = "allow out https requests"
-    from_port   = 443
-    to_port     = 443
+    from_port   = 0 
+    to_port     = 65535 
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
