@@ -25,15 +25,17 @@ resource "aws_iam_instance_profile" "kungfu_profile" {
 resource "aws_instance" "kungfu_ec2" {
   ami                  = data.aws_ami.debian_11.id
   instance_type        = "t2.micro"
-  security_groups      = [aws_security_group.kungfu_sg.name]
+  vpc_security_group_ids   = [aws_security_group.vps_sg.id]
   key_name             = aws_key_pair.kungfu_key.id
   iam_instance_profile = aws_iam_instance_profile.kungfu_profile.name
   user_data            = file("${path.module}/scripts/install_lab.sh")
+  subnet_id            = var.public_subnet_id
   root_block_device {
     delete_on_termination = true
   }
   metadata_options {
-    http_tokens  = "required"
+    http_tokens   = "required"
+    http_endpoint = "enabled"
   }
   tags = {
     Name = "tf-${var.instance_name}-ec2"
@@ -58,29 +60,52 @@ resource "aws_eip_association" "eip_assoc" {
   allocation_id = aws_eip.kungfu_eip.id
 }
 
-resource "aws_security_group" "kungfu_sg" {
+resource "aws_security_group" "vps_sg" {
   name        = "tf-${var.instance_name}-sg"
-  description = "Allow SSH & HTTPS traffic from current ip"
-  vpc_id      = aws_default_vpc.default.id
+  description = "Allow HTTP, HTTPS and SSH traffic"
+  vpc_id      = var.vpc_id
 
   ingress {
-    description = "Allow all ingress"
-    from_port   = 0
-    to_port     = 65535
+    description = "allow in http requests"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["${var.my_ip}/32"]
+  }
+
+  ingress {
+    description = "allow in https requests"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["${var.my_ip}/32"]
+  }
+
+  ingress {
+    description = "allow in ssh requests"
+    from_port   = 22
+    to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["${var.my_ip}/32"]
   }
 
   egress {
-    description = "Allow all egress"
-    from_port   = 0
-    to_port     = 65535
+    description = "allow out http requests"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    description = "allow out https requests"
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = "tf-${var.instance_name}-sg"
+    Name = "${var.instance_name}-sg"
   }
 }
-

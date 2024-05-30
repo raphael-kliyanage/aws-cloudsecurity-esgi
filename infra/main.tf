@@ -1,7 +1,9 @@
 module "ec2_instance" {
-  source        = "./ec2_instance"
-  my_ip         = chomp(data.http.myip.body)
-  instance_name = "kungfu"
+  source           = "./ec2_instance"
+  my_ip            = chomp(data.http.myip.body)
+  instance_name    = "kungfu"
+  vpc_id           = module.vpc.vpc_id
+  public_subnet_id = module.vpc.public_subnet_id
 }
 
 module "s3_bucket" {
