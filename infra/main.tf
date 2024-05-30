@@ -6,7 +6,7 @@ module "ec2_instance" {
 
 module "s3_bucket" {
   source                        = "./s3_bucket"
-  bucket_name                   = "groupe1-5si1-esgi-2024-llevy"
+  bucket_name                   = "groupe1-5si1-esgi-2024-rkl"
   very_secret_access_key_id     = module.iam.access_key_id
   very_secret_access_key_secret = module.iam.access_key_secret
   very_secret_username          = module.iam.username
@@ -16,6 +16,11 @@ module "iam" {
   source      = "./iam"
   username    = "kungfu"
   policy_name = "kungfu"
+}
+
+module "kms" {
+  source     = "./kms"
+  ressource  = "groupe1-5si1-esgi-2024-rkl-kms"
 }
 
 data "http" "myip" {
