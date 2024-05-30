@@ -18,6 +18,10 @@ module "iam" {
   policy_name = "kungfu"
 }
 
+module "vpc" {
+  source = "./vpc"
+}
+
 data "http" "myip" {
   url = "https://ifconfig.me"
 }
