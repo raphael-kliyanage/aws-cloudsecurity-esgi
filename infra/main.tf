@@ -20,7 +20,7 @@ module "iam" {
 
 module "kms" {
   source     = "./kms"
-  
+  ressource  = "groupe1-5si1-esgi-2024-rkl-kms"
 }
 
 data "http" "myip" {
