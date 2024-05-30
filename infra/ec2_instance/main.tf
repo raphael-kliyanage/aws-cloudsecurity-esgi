@@ -104,14 +104,6 @@ resource "aws_security_group" "kungfu_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  egress {
-    description = "allow ssh requests"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   tags = {
     Name = "tf-${var.instance_name}-sg"
   }
