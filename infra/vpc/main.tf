@@ -1,4 +1,4 @@
-resource "aws_vpc" "main" {
+resource "aws_vpc" "main-vpc" {
  cidr_block = "10.0.0.0/16"
 
  tags = {
@@ -6,24 +6,37 @@ resource "aws_vpc" "main" {
  }
 }
 
-resource "aws_subnet" "public_subnets" {
- count              = length(var.public_subnet_cidrs)
- vpc_id             = aws_vpc.main.id
- cidr_block         = element(var.public_subnet_cidrs, count.index)
- availability_zone  = element(var.azs, count.index)
+resource "aws_subnet" "public_subnet" {
+ vpc_id             = aws_vpc.main-vpc.id
+ cidr_block         = "10.0.2.0/24"
+ availability_zone  = "eu-west-3a"
 
  tags = {
-  Name = "Public Subnet ${count.index + 1}"
+  Name = "Public Subnet"
  }
 }
 
-resource "aws_subnet" "private_subnets" {
- count              = length(var.private_subnet_cidrs)
- vpc_id             = aws_vpc.main.id
- cidr_block         = element(var.private_subnet_cidrs, count.index)
- availability_zone  = element(var.azs, count.index)
+resource "aws_subnet" "private_subnet" {
+ vpc_id             = aws_vpc.main-vpc.id
+ cidr_block         = "10.0.1.0/24"
+ availability_zone  = "eu-west-3a"
 
  tags = {
-  Name = "Private Subnet ${count.index + 1}"
+  Name = "Private Subnet"
  }
+
+resource "aws_internet_gateway" "main-igw" {
+ vpc_id = aws_vpc.main-vpc.id
+
+ tags   = {
+  Name  = "main-vpc-IGW"
+  }
 }
+
+resource "aws_route_table" "public-route-table" {
+ vpc_id = aws_vpc.main-vpc.id
+
+ tags = {
+  Name = "public-route-table"
+  }
+ }
