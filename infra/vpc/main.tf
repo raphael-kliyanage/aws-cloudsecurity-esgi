@@ -74,29 +74,38 @@ resource "aws_security_group" "web-sg" {
  vpc_id = aws_vpc.main-vpc.id
  name   = "web-sg"
 
- ingress {
-  description = "allow in http requests"
-  from_port   = 80
-  to_port     = 80
-  protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
- }
+ #ingress {
+ # description = "allow in http requests"
+ # from_port   = 80
+ # to_port     = 80
+ # protocol    = "tcp"
+ # cidr_blocks = ["0.0.0.0/0"]
+ #}
 
- ingress {
-  description = "allow in https requests"
-  from_port   = "443"
-  to_port     = "443"
-  protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
-  }
+ #ingress {
+ # description = "allow in https requests"
+ # from_port   = "443"
+ # to_port     = "443"
+ # protocol    = "tcp"
+ # cidr_blocks = ["0.0.0.0/0"]
+ # }
 
-  ingress {
-   description = "allow in ssh requests"
-   from_port   = 22
-   to_port     = 22
-   protocol    = "tcp"
-   cidr_blocks = ["0.0.0.0/0"]
- }
+  #ingress {
+  # description = "allow in ssh requests"
+  # from_port   = 22
+  # to_port     = 22
+  # protocol    = "tcp"
+  # cidr_blocks = ["0.0.0.0/0"]
+ #}
+  dynamic "ingress" {
+   for_each = var.kung-fu_ec2_ingress.ports
+    content {
+     from_port   = ingress.value["port"]
+     to_port     = ingress.value["port"]
+     protocol    = ingress.value["protocol"]
+     cidr_blocks = ingress.value["cidr_blocks"]
+    }
+   }
 
  egress {
   from_port   = 0
