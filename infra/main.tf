@@ -28,6 +28,7 @@ module "vpc" {
  private_subnet     = "Private Subnet"
  internet_gateway   = "Internet Gateway"
  public_route_table = "Public Route Table"
+ name_vpc_groupe1   = "Groupe 1 5SI1 VPC"
 }
 
 data "http" "myip" {
