@@ -13,3 +13,7 @@ variable "internet_gateway" {
 variable "public_route_table" {
  type = string
 }
+
+variable "name_vpc_groupe1" {
+ type = string
+}
