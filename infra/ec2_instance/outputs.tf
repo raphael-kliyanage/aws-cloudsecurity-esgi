@@ -1,4 +1,4 @@
 output "instance_ip_addr" {
-  value = aws_eip.kungfu_eip.public_ip
+  value = aws_eip.nat-eip.public_ip
 }
 
