@@ -98,7 +98,7 @@ resource "aws_security_group" "web-sg" {
   # cidr_blocks = ["0.0.0.0/0"]
  #}
   dynamic "ingress" {
-   for_each = var.kung-fu_ec2_ingress.ports
+   for_each = var.kung-fu_ec2_ingress_ports
     content {
      from_port   = ingress.value["port"]
      to_port     = ingress.value["port"]
