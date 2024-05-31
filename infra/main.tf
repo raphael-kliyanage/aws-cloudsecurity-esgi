@@ -10,7 +10,7 @@ module "ec2_instance" {
 
 module "s3_bucket" {
   source                        = "./s3_bucket"
-  bucket_name                   = "groupe1-5SI1-esgi-2024-mthouvenin"
+  bucket_name                   = "groupe1-5si1-esgi-2024-mthouvenin"
   very_secret_access_key_id     = module.iam.access_key_id
   very_secret_access_key_secret = module.iam.access_key_secret
   very_secret_username          = module.iam.username
