@@ -4,6 +4,7 @@ module "ec2_instance" {
   instance_name    = "kungfu"
   vpc_id           = module.vpc.vpc_id
   public_subnet_id = module.vpc.public_subnet_id
+  vpc_security_group_ids = module.vpc.vpc_security_group_ids
 }
 
 module "s3_bucket" {

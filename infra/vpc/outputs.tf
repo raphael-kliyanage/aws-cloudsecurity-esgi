@@ -5,3 +5,7 @@ output "public_subnet_id" {
 output "vpc_id" {
   value = aws_vpc.main-vpc.id
 }
+
+output "vpc_security_group_ids" {
+ value = aws_security_group.web-sg.id
+}
