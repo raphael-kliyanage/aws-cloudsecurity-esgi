@@ -23,6 +23,22 @@ resource "aws_iam_instance_profile" "kungfu_profile" {
 }
 
 resource "aws_instance" "kungfu_ec2" {
+<<<<<<< HEAD
+  ami                    = data.aws_ami.debian_11.id
+  instance_type          = "t2.micro"
+  subnet_id              = var.subnet_id
+  vpc_security_group_ids = [var.vpc_security_group_ids]
+  key_name               = aws_key_pair.kungfu_key.id
+  iam_instance_profile   = aws_iam_instance_profile.kungfu_profile.name
+  user_data              = file("${path.module}/scripts/install_lab.sh")
+  root_block_device {
+    delete_on_termination = true
+  }
+  metadata_options {
+   http_tokens   = "required"
+   http_endpoint = "enabled"
+  }
+=======
   ami                  = data.aws_ami.debian_11.id
   instance_type        = "t2.micro"
   security_groups      = [aws_security_group.kungfu_sg.name]
@@ -32,11 +48,20 @@ resource "aws_instance" "kungfu_ec2" {
   root_block_device {
     delete_on_termination = true
   }
+>>>>>>> efc1acb6c6fe3e375c521cbaae20336a68d57d2d
   tags = {
     Name = "tf-${var.instance_name}-ec2"
   }
 }
 
+<<<<<<< HEAD
+resource "aws_eip" "nat-eip" {
+ vpc  = true
+
+ tags = {
+ Name = "${var.nat_eip}"
+ }
+=======
 resource "aws_eip" "kungfu_eip" {
   vpc = true
   tags = {
@@ -48,10 +73,14 @@ resource "aws_default_vpc" "default" {
   tags = {
     Name = "Default VPC"
   }
+>>>>>>> efc1acb6c6fe3e375c521cbaae20336a68d57d2d
 }
 
 resource "aws_eip_association" "eip_assoc" {
   instance_id   = aws_instance.kungfu_ec2.id
+<<<<<<< HEAD
+  allocation_id = aws_eip.nat-eip.id
+=======
   allocation_id = aws_eip.kungfu_eip.id
 }
 
@@ -79,4 +108,5 @@ resource "aws_security_group" "kungfu_sg" {
   tags = {
     Name = "tf-${var.instance_name}-sg"
   }
+>>>>>>> efc1acb6c6fe3e375c521cbaae20336a68d57d2d
 }
