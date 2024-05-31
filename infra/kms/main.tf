@@ -1,6 +1,6 @@
 data "aws_caller_identity" "current" {}
 
-resource "aws_kms_key" "${var.name_kms_key}" {
+resource "aws_kms_key" "groupe1-5si1-esgi-2024-kms" {
   description             = "Symmetric encryption KMS key"
   enable_key_rotation     = true
   deletion_window_in_days = 20

@@ -24,7 +24,6 @@ module "iam" {
 
 module "kms" {
  source       = "./kms"
- name_kms_key = "groupe1-5si1-esgi-2024-kms"
  }
 
 module "vpc" {
