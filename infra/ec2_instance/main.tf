@@ -26,7 +26,7 @@ resource "aws_instance" "kungfu_ec2" {
   ami                    = data.aws_ami.debian_11.id
   instance_type          = "t2.micro"
   subnet_id              = var.subnet_id
-  vpc_security_group_ids = [var.vpc_security_group.ids]
+  vpc_security_group_ids = [var.vpc_security_group_ids]
   key_name               = aws_key_pair.kungfu_key.id
   iam_instance_profile   = aws_iam_instance_profile.kungfu_profile.name
   user_data              = file("${path.module}/scripts/install_lab.sh")
