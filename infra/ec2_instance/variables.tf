@@ -18,6 +18,6 @@ variable "vpc_security_group_ids" {
  type = string
 }
 
-variable "allocation_id"
+variable "nat_eip"
  type = string
 }
