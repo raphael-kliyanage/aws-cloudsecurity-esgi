@@ -42,7 +42,15 @@ resource "aws_instance" "kungfu_ec2" {
   }
 }
 
+resource "aws_eip" "nat-eip" {
+ vpc  = true
+
+ tags = {
+ Name = "${var.nat_eip}"
+ }
+}
+
 resource "aws_eip_association" "eip_assoc" {
   instance_id   = aws_instance.kungfu_ec2.id
-  allocation_id = var.allocation_id
+  allocation_id = aws_eip.nat-eip.id
 }
