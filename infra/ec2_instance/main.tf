@@ -23,13 +23,13 @@ resource "aws_iam_instance_profile" "kungfu_profile" {
 }
 
 resource "aws_instance" "kungfu_ec2" {
-  ami                  = data.aws_ami.debian_11.id
-  instance_type        = "t2.micro"
-  vpc_security_group_ids   = [aws_security_group.vps_sg.id]
-  key_name             = aws_key_pair.kungfu_key.id
-  iam_instance_profile = aws_iam_instance_profile.kungfu_profile.name
-  user_data            = file("${path.module}/scripts/install_lab.sh")
-  subnet_id            = var.public_subnet_id
+  ami                    = data.aws_ami.debian_11.id
+  instance_type          = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.vps_sg.id]
+  key_name               = aws_key_pair.kungfu_key.id
+  iam_instance_profile   = aws_iam_instance_profile.kungfu_profile.name
+  user_data              = file("${path.module}/scripts/install_lab.sh")
+  subnet_id              = var.public_subnet_id
   root_block_device {
     delete_on_termination = true
   }
@@ -47,15 +47,6 @@ resource "aws_eip" "kungfu_eip" {
   tags = {
     Name = "tf-${var.instance_name}-eip"
   }
-}
-
-resource "aws_nat_gateway" "nat-gateway" {
- allocation_id = aws_eip.kungfu_eip.id
- subnet_id     = var.public_subnet_id.id
-
- tags = {
-  Name = "nat-gateway"
- }
 }
 
 resource "aws_default_vpc" "default" {
@@ -77,15 +68,15 @@ resource "aws_security_group" "vps_sg" {
   ingress {
     description = "allow in http requests"
     from_port   = 0
-    to_port     = 65535 
+    to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["${var.my_ip}/32"]
   }
 
   egress {
     description = "allow out https requests"
-    from_port   = 0 
-    to_port     = 65535 
+    from_port   = 0
+    to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
