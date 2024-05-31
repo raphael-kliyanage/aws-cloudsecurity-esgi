@@ -5,7 +5,7 @@ module "ec2_instance" {
   vpc_id                 = module.vpc.vpc_id
   subnet_id              = module.vpc.subnet_id
   vpc_security_group_ids = module.vpc.vpc_security_group_ids
-  allocation_id          = module.vpc.allocation_id
+  nat_eip                = "NAT EIP"
 }
 
 module "s3_bucket" {
@@ -23,7 +23,11 @@ module "iam" {
 }
 
 module "vpc" {
- source       = "./vpc"
+ source             = "./vpc"
+ public_subnet      = "Public Subnet"
+ private_subnet     = "Private Subnet"
+ internet_gateway   = "Internet Gateway"
+ public_route_table = "Public Route Table"
 }
 
 data "http" "myip" {
