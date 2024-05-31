@@ -22,6 +22,10 @@ module "iam" {
   policy_name = "kungfu"
 }
 
+module "kms" {
+ source       = "./kms"
+ }
+
 module "vpc" {
  source             = "./vpc"
  public_subnet      = "Public Subnet"
